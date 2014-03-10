@@ -41,16 +41,43 @@ int main(int argc, char **argv)
 		perror("Problem in connecting to the server");
 		exit(2);
 	}
+	system("clear");
 
 	while(1){
 		printf("Welcome to NJUCS Weather Forecast Demo Program!\nPlease input City Name in Chinese pinyin(e.g. nanjing or beijing)\n(c)cls,(#)exit\n");
 		scanf("%s",&buffer);
+		//user selected to exit
 		if(buffer[0] == '#' && buffer[1] == '\0'){
 			break;
+		}
+		//clear the screen
+		if(buffer[0] == 'c' && buffer[1] == '\0'){
+			system("clear");
+			continue;
+		}
+
+		//validate city name
+		sendline[0] = 1;
+		strcpy(city,buffer);//get the city name from buffer
+		strcpy(sendline + 2,city);
+		send(sockfd, sendline, strlen(sendline + 2) + 2, 0);
+		receive(recvline, sockfd);
+		if(recvline[0] == 4){
+			printf("Sorry, Server does not have weather information for city %s!\n", city);
+		}
+		else{
+			printf("Valid city.\n");
 		}
 		memset(sendline, 0, MAXLINE);
 		memset(recvline, 0, MAXLINE);
 	}
 	exit(0);
+}
+void receive(char *recvline, int sockfd)
+{
+	if(recv(sockfd, recvline, MAXLINE, 0) == 0){
+		perror("The server terminated prematurely");
+		exit(3);
+	}
 }
 
