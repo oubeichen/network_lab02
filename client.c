@@ -12,7 +12,7 @@
 #define RECV_SIZE 137/*length of receiving package's data*/
 
 /*receive and send packages*/
-void send_recv(char *sendline, char *recvline, int sockfd)
+void send_recv(unsigned char *sendline, unsigned char *recvline, int sockfd)
 {
 	send(sockfd, sendline, SEND_SIZE, 0);
 	if(recv(sockfd, recvline, MAXLINE, 0) == 0){
@@ -21,16 +21,65 @@ void send_recv(char *sendline, char *recvline, int sockfd)
 	}
 }
 /*parse and print received messages*/
-void output()
+void output(unsigned char *recvline)
 {
-	printf("sample output\n");
+	char city[MAXLEN_CITY + 1], tenki[][7] = {"shower", "clear", "cloudy", "rain", "fog"};
+	//printf("sample output\n");
+	strncpy(city, recvline + 2, MAXLEN_CITY);
+	//query successful
+	if(recvline[0] == 1){
+		printf("City: %s  ", city);
+		printf("Today is: %d/%02d/%02d  ", recvline[32] * 0x100 + recvline[33], recvline[34], recvline[35]);
+		printf("Weather information is as follows: \n");
+		
+		//one day
+		if(recvline[1] == 0x41){
+			//today,2nd day,3rd day,4th day
+			if(recvline[36] == 1){
+				printf("Today's ");
+			}else if(recvline[36] == 2){
+				printf("The 2nd day's ");
+			}else if(recvline[36] == 3){
+				printf("The 3rd day's ");
+			}else if(recvline[36] <= 9 && recvline[36] >= 4){
+				printf("The %dth day's ", recvline[36]);
+			}else{
+				printf("Server error!\n");
+				return;
+			}
+
+			//Weather
+			if(recvline[37] >= 0 && recvline[37] <= 4){
+				printf("Weather is: %s;  ", tenki[recvline[37]]);
+			}else{
+				printf("Server error!\n");
+			}
+
+			//Tempature
+			printf("Temp:%d\n", recvline[38]);
+		}
+		//three days
+		else if(recvline[1] == 0x42){
+
+		}else{
+			printf("Server error!\n");
+		}
+	}
+	//no such info
+	else if(recvline[0] == 2){
+		printf("Sorry, no given day's weather information for city %s!\n", city);
+	}
+	else{
+		printf("Server error!\n");
+		return;
+	}
 }
 
 int main(int argc, char **argv)
 {
 	int sockfd;
 	struct sockaddr_in servaddr;
-	char sendline[MAXLINE],recvline[MAXLINE],buffer[MAXLINE];
+	unsigned char sendline[MAXLINE],recvline[MAXLINE],buffer[MAXLINE];
 
 	//Create a socket for the client
 	//If sockfd<0 there was an error in the creation of the socket
@@ -65,7 +114,7 @@ int main(int argc, char **argv)
 		printf("Welcome to NJUCS Weather Forecast Demo Program!\n");
 		printf("Please input City Name in Chinese pinyin(e.g. nanjing or beijing)\n");
 		printf("(c)cls,(#)exit\n");
-		scanf("%s", buffer);
+		gets(buffer);
 		//user selected to exit
 		if(buffer[0] == '#' && buffer[1] == '\0'){
 			exit(0);
@@ -92,7 +141,7 @@ int main(int argc, char **argv)
 			printf("3.custom day by yourself\n(r)back,(c)cls,(#)exit\n");
 			printf("===================================================\n");
 			while(1){//query choose loop
-				scanf("%s", buffer);
+				gets(buffer);
 
 				//invalid input
 				if(buffer[1] != 0){
@@ -122,7 +171,7 @@ int main(int argc, char **argv)
 					sendline[1] = 1;
 					sendline[32] = 1;
 					send_recv(sendline, recvline, sockfd);
-					output();
+					output(recvline);
 				}
 				//three days
 				else if(buffer[0] == '2'){
@@ -131,13 +180,13 @@ int main(int argc, char **argv)
 					sendline[1] = 2;
 					sendline[32] = 3;
 					send_recv(sendline, recvline, sockfd);
-					output();
+					output(recvline);
 				}
 				//custom days
 				else if(buffer[0] == '3'){
 					while(1){//custom days loop
 						printf("Please enter the day number(below 10, e.g. 1 means today):\n");
-						scanf("%s", buffer);
+						gets(buffer);
 						//invalid input
 						if(buffer[1] != 0 || buffer[0] < '1' || buffer[0] > '9'){
 							printf("Input error!\n");
@@ -147,7 +196,7 @@ int main(int argc, char **argv)
 							sendline[1] = 1;
 							sendline[32] = buffer[0] - '0';
 							send_recv(sendline, recvline, sockfd);
-							output();
+							output(recvline);
 							break;
 						}
 					}
