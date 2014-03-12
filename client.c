@@ -60,7 +60,15 @@ void output(unsigned char *recvline)
 		}
 		//three days
 		else if(recvline[1] == 0x42){
-
+			//debug server
+			if(recvline[36] != 3 || recvline[37] < 0 || recvline[37] > 4
+					|| recvline[39] < 0 || recvline[39] > 4
+					|| recvline[41] < 0 || recvline[41] > 4){
+				printf("Server error!\n");
+			}
+			printf("The 1st day's Weather is: %s;  Temp:%d\n", tenki[recvline[37]], recvline[38]);
+			printf("The 2nd day's Weather is: %s;  Temp:%d\n", tenki[recvline[39]], recvline[40]);
+			printf("The 3rd day's Weather is: %s;  Temp:%d\n", tenki[recvline[41]], recvline[42]);
 		}else{
 			printf("Server error!\n");
 		}
