@@ -56,7 +56,7 @@ void output(unsigned char *recvline)
 			}
 
 			//Tempature
-			printf("Temp:%d\n", recvline[38]);
+			printf("Temp:%02d\n", recvline[38]);
 		}
 		//three days
 		else if(recvline[1] == 0x42){
@@ -66,9 +66,9 @@ void output(unsigned char *recvline)
 					|| recvline[41] < 0 || recvline[41] > 4){
 				printf("Server error!\n");
 			}
-			printf("The 1st day's Weather is: %s;  Temp:%d\n", tenki[recvline[37]], recvline[38]);
-			printf("The 2nd day's Weather is: %s;  Temp:%d\n", tenki[recvline[39]], recvline[40]);
-			printf("The 3rd day's Weather is: %s;  Temp:%d\n", tenki[recvline[41]], recvline[42]);
+			printf("The 1st day's Weather is: %s;  Temp:%02d\n", tenki[recvline[37]], recvline[38]);
+			printf("The 2nd day's Weather is: %s;  Temp:%02d\n", tenki[recvline[39]], recvline[40]);
+			printf("The 3rd day's Weather is: %s;  Temp:%02d\n", tenki[recvline[41]], recvline[42]);
 		}else{
 			printf("Server error!\n");
 		}
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 		printf("Welcome to NJUCS Weather Forecast Demo Program!\n");
 		printf("Please input City Name in Chinese pinyin(e.g. nanjing or beijing)\n");
 		printf("(c)cls,(#)exit\n");
-		gets(buffer);
+		fgets(buffer, MAXLINE, stdin);
 		//user selected to exit
 		if(buffer[0] == '#' && buffer[1] == '\0'){
 			exit(0);
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
 			printf("3.custom day by yourself\n(r)back,(c)cls,(#)exit\n");
 			printf("===================================================\n");
 			while(1){//query choose loop
-				gets(buffer);
+				fgets(buffer, MAXLINE ,stdin);
 
 				//invalid input
 				if(buffer[1] != 0){
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 				else if(buffer[0] == '3'){
 					while(1){//custom days loop
 						printf("Please enter the day number(below 10, e.g. 1 means today):\n");
-						gets(buffer);
+						fgets(buffer, MAXLINE ,stdin);
 						//invalid input
 						if(buffer[1] != 0 || buffer[0] < '1' || buffer[0] > '9'){
 							printf("Input error!\n");
