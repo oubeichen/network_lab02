@@ -9,7 +9,6 @@
 #define SERV_PORT 6666 /*server port*/
 #define MAXLEN_CITY 29/*max length of city name*/
 #define SEND_SIZE 33 /*length of sending package's data*/
-#define RECV_SIZE 137/*length of receiving package's data*/
 
 /*receive and send packages*/
 void send_recv(unsigned char *sendline, unsigned char *recvline, int sockfd)
@@ -123,6 +122,8 @@ int main(int argc, char **argv)
 		printf("Please input City Name in Chinese pinyin(e.g. nanjing or beijing)\n");
 		printf("(c)cls,(#)exit\n");
 		fgets(buffer, MAXLINE, stdin);
+		if(buffer[strlen(buffer) - 1] == '\n')//remove '\n' at the end
+			buffer[strlen(buffer) - 1] = '\0';
 		//user selected to exit
 		if(buffer[0] == '#' && buffer[1] == '\0'){
 			exit(0);
@@ -150,9 +151,8 @@ int main(int argc, char **argv)
 			printf("===================================================\n");
 			while(1){//query choose loop
 				fgets(buffer, MAXLINE ,stdin);
-
 				//invalid input
-				if(buffer[1] != 0){
+				if(buffer[1] != '\n'){
 					printf("Input error!\n");
 				}
 				//user selected to exit
@@ -193,10 +193,10 @@ int main(int argc, char **argv)
 				//custom days
 				else if(buffer[0] == '3'){
 					while(1){//custom days loop
-						printf("Please enter the day number(below 10, e.g. 1 means today):\n");
+						printf("Please enter the day number(below 10, e.g. 1 means today):");
 						fgets(buffer, MAXLINE ,stdin);
 						//invalid input
-						if(buffer[1] != 0 || buffer[0] < '1' || buffer[0] > '9'){
+						if(buffer[1] != '\n' || buffer[0] < '1' || buffer[0] > '9'){
 							printf("Input error!\n");
 						}
 						else{
