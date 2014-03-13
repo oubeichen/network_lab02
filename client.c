@@ -43,7 +43,7 @@ void output(unsigned char *recvline)
 			}else if(recvline[36] <= 9 && recvline[36] >= 4){
 				printf("The %dth day's ", recvline[36]);
 			}else{
-				printf("Server error!\n");
+				printf("Server error!(date)\n");
 				return;
 			}
 
@@ -51,7 +51,7 @@ void output(unsigned char *recvline)
 			if(recvline[37] >= 0 && recvline[37] <= 4){
 				printf("Weather is: %s;  ", tenki[recvline[37]]);
 			}else{
-				printf("Server error!\n");
+				printf("Server error!(weather)\n");
 			}
 
 			//Tempature
