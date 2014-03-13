@@ -99,14 +99,14 @@ int main(int argc, char **argv)
 	//Creation of the socket
 	memset(&servaddr, 0, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
-	/*
+	
 	 if(argc == 2){
 	      servaddr.sin_addr.s_addr = inet_addr(argv[1]);
 	 }else{
 	      servaddr.sin_addr.s_addr = inet_addr("114.212.191.33");
 	 }
-	 */
-	servaddr.sin_addr.s_addr = inet_addr("114.212.191.33");
+	
+	//servaddr.sin_addr.s_addr = inet_addr("114.212.191.33");
 	servaddr.sin_port = htons(SERV_PORT);//convert to big-endian order
 
 	//Connection of the client to the socket
