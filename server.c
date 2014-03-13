@@ -75,6 +75,7 @@ int main(int argc, char **argv)
 				{
 					if(i == citynum)//city not found
 					{
+						printf("City not found.\n");
 						sendline[0] = 4;
 					}else{
 						sendline[0] = 3;
@@ -90,19 +91,22 @@ int main(int argc, char **argv)
 
 					if(i == citynum)//city not found,reply no such weather
 					{
+						printf("City not found.\n");
 						sendline[0] = 2;
 					}else{//valid city
 						if(recvline[1] == 1){//one day
 							int query_day = recvline[32];
 							sendline[1] = 0x41;
 							//generate a random weather
-							if(query_day >= 0 && query_day <= 6)//allow 0~6
+							if(query_day >= 0 && query_day <= 5)//allowing 0~5
 							{
 								sendline[36] = recvline[32];
 								sendline[37] = rand() % 5;//weather
 								sendline[38] = rand() % 35;//temp 0~35
+								printf("Day%d 's weather generated.\n", query_day);
 								sendline[0] = 1;
-							}else{//invalid query or weather not find
+							}else{//invalid query or weather not found
+								printf("Weather not found.\n");
 								sendline[0] = 2;
 							}
 						}else if(recvline[1] == 2){//three days
@@ -115,6 +119,7 @@ int main(int argc, char **argv)
 								sendline[40] = rand() % 35;//temp1
 								sendline[41] = rand() % 5;//weather1
 								sendline[42] = rand() % 35;//temp1
+								printf("Three days' weather generated.\n");
 								sendline[0] = 1;
 							}else{//invalid query
 								sendline[0] = 2;

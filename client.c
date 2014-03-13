@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 	while(1){//cityname loop
 		memset(sendline, 0, MAXLINE);
 		memset(recvline, 0, MAXLINE);
-		printf("Welcome to NJUCS Weather Forecast Demo Program!\n");
+		printf("Welcome to Oubeichen's Weather Forecast Demo Program!(by oubeichen 111220086)\n");
 		printf("Please input City Name in Chinese pinyin(e.g. nanjing or beijing)\n");
 		printf("(c)cls,(#)exit\n");
 		fgets(buffer, MAXLINE, stdin);
