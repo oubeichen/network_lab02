@@ -1,3 +1,10 @@
+all: client server
+	gcc -o client client.o
+	gcc -o server server.o
+test:client.o
+	gcc -o client client.o
+	clear
+	@./client 127.0.0.1
 cli: client.o
 	gcc -o client client.o
 	clear
