@@ -24,8 +24,6 @@ int main(int argc, char **argv)
 	time_t now;
 	struct tm *date;
 
-	srand(time(NULL));/*Generate a random seed*/
-
 	//Create a socket for the soclet
 	//If sockfd<0 there was error in the creation of the socket
 	if((listenfd = socket (AF_INET, SOCK_STREAM, 0)) < 0){
@@ -57,6 +55,8 @@ int main(int argc, char **argv)
 			
 			//close listening socket
 			close(listenfd);
+
+			srand(time(NULL));/*Generate a random seed*/
 
 			for(; (n = recv(connfd, recvline, MAXLINE,0)) > 32;
 					send(connfd, sendline, SEND_SIZE,0), 
